@@ -6,19 +6,21 @@ A quotation mark sits in the bar. Hover it for the day's quote, click it for the
 quote in full, and browse the rest of the deck from there. Nothing is fetched:
 the deck ships with the plugin, so it works offline and costs nothing to run.
 
+The bar carries the opening mark; the panel closes the quotation. Copy a quote
+and both marks become a check for a moment.
+
 ## Install
 
-The plugin lives at `~/.config/omarchy/plugins/atsokolas.munger/`. Add it to a
-bar section in `~/.config/omarchy/shell.json`:
-
-```json
-{ "id": "atsokolas.munger" }
+```bash
+omarchy plugin add https://github.com/atsokolas/omarchy-munger-plugin.git --enable
 ```
 
-or from the shell:
+That clones the plugin into `~/.config/omarchy/plugins/atsokolas.munger`,
+validates it against the shell's manifest schema, and puts it on the bar. Move
+it if it did not land where you want:
 
 ```bash
-omarchy bar move atsokolas.munger --section right
+omarchy bar move atsokolas.munger --section right --before omarchy.network
 ```
 
 ## Interactions
@@ -95,6 +97,7 @@ checked before use:
 | `󰆏` | U+F018F | copy |
 | `󰒝` | U+F049D | shuffle |
 | `󰃭` | U+F00ED | back to today |
+| `󰄬` | U+F012C | the check, while a copy is fresh |
 
 `❝` (U+275D) is **not** in the font and renders blank — do not swap the mark
 for an ornamental one without checking:
@@ -110,11 +113,26 @@ and the previously imported `Model.js`.
 
 ## The quotes
 
-48 quotes, tagged by theme. They are widely circulated Munger lines rather than
-citations to a particular talk or letter; the tags are our own grouping, not his.
-Add or remove entries in the `QUOTES` array in `Model.js` — the tests check that
-every entry has text and a tag, that there are no duplicates, and that nothing is
-too long to read in the panel.
+48 quotes, tagged by theme. The tags are our own grouping, not his. Where a
+quote's provenance is a matter of record — the 1994 USC talk, the 2007 USC law
+school commencement, the 1986 Harvard School address, and a few others — the
+entry carries a `src` that the panel shows under the attribution; the rest go
+without rather than guess. Add or remove entries in the `QUOTES` array in
+`Model.js` — the tests check that every entry has text and a tag, that there are
+no duplicates, and that nothing is too long to read in the panel.
+
+## The day
+
+A small `Service.qml` holds the day — one clock per shell rather than one per
+bar — so every monitor turns over together, and anything else on the shell (the
+Front Page, say) can read `todayQuote` through `shell.serviceFor("atsokolas.munger")`.
+
+## Remove
+
+```bash
+omarchy plugin disable atsokolas.munger
+omarchy plugin remove atsokolas.munger --yes
+```
 
 ## License
 
