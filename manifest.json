@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "id": "atsokolas.munger",
+  "name": "Munger",
+  "version": "1.0.0",
+  "author": "atsokolas",
+  "license": "MIT",
+  "description": "A Charlie Munger quote a day on the Omarchy bar.",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Panel.qml"
+  },
+  "barWidget": {
+    "displayName": "Munger",
+    "description": "One Charlie Munger quote a day, with the rest of the deck a keystroke away.",
+    "category": "Info",
+    "aliases": [
+      "munger",
+      "quote",
+      "quotes",
+      "charlie",
+      "wisdom"
+    ],
+    "allowMultiple": false,
+    "defaultSection": "right",
+    "defaults": {
+      "showTeaser": false,
+      "teaserLength": 34
+    },
+    "schema": [
+      {
+        "key": "showTeaser",
+        "type": "boolean",
+        "label": "Show the quote on the bar",
+        "defaultValue": false,
+        "description": "Show a trimmed line of today's quote beside the quotation mark."
+      },
+      {
+        "key": "teaserLength",
+        "type": "integer",
+        "label": "Bar text length",
+        "min": 12,
+        "max": 80,
+        "step": 2,
+        "defaultValue": 34,
+        "description": "How much of the quote fits on the bar before it is trimmed to a word boundary."
+      }
+    ]
+  }
+}
