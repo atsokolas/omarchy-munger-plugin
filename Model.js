@@ -7,21 +7,25 @@ var ATTRIBUTION = "Charlie Munger"
 // (U+275D) and the Nerd Font MDI quote glyphs do not. See the font notes in
 // README.md before swapping this.
 var QUOTE_MARK = "“"
+// nf-md-check. Verified to render on this machine's font; see README.md.
+var CHECK_MARK = "󰄬"
 
-// The deck. Order here is irrelevant — the daily pick shuffles a fresh
-// permutation for every cycle through the deck, so this array is just
+// The deck. `src` names where a quote was said when that is a matter of
+// record; the rest go without rather than guess. Order here is irrelevant —
+// the daily pick shuffles a fresh permutation for every cycle through the
+// deck, so this array is just
 // storage. Tags are our own grouping, not Munger's.
 var QUOTES = [
   { text: "The big money is not in the buying and selling, but in the waiting.", tag: "Patience" },
   { text: "Show me the incentive and I will show you the outcome.", tag: "Incentives" },
   { text: "It is remarkable how much long-term advantage people like us have gotten by trying to be consistently not stupid, instead of trying to be very intelligent.", tag: "Judgment" },
-  { text: "Invert, always invert: turn a situation or problem upside down. Look at it backward.", tag: "Inversion" },
+  { text: "Invert, always invert: turn a situation or problem upside down. Look at it backward.", tag: "Inversion", src: "After the mathematician Carl Jacobi" },
   { text: "Knowing what you don't know is more useful than being brilliant.", tag: "Judgment" },
   { text: "The first rule of compounding: never interrupt it unnecessarily.", tag: "Compounding" },
-  { text: "Spend each day trying to be a little wiser than you were when you woke up.", tag: "Learning" },
+  { text: "Spend each day trying to be a little wiser than you were when you woke up.", tag: "Learning", src: "USC Gould School of Law commencement, 2007" },
   { text: "In my whole life, I have known no wise people who didn't read all the time — none, zero.", tag: "Learning" },
   { text: "Take a simple idea and take it seriously.", tag: "Focus" },
-  { text: "You must know the big ideas in the big disciplines and use them routinely — all of them, not just a few.", tag: "Thinking" },
+  { text: "You must know the big ideas in the big disciplines and use them routinely — all of them, not just a few.", tag: "Thinking", src: "A Lesson on Elementary, Worldly Wisdom · USC, 1994" },
   { text: "All I want to know is where I'm going to die, so I'll never go there.", tag: "Inversion" },
   { text: "A great business at a fair price is superior to a fair business at a great price.", tag: "Investing" },
   { text: "Mimicking the herd invites regression to the mean.", tag: "Independence" },
@@ -29,37 +33,37 @@ var QUOTES = [
   { text: "Those who keep learning will keep rising in life.", tag: "Learning" },
   { text: "I did not intend to get rich. I just wanted to get independent.", tag: "Independence" },
   { text: "Acquire worldly wisdom and adjust your behavior accordingly.", tag: "Learning" },
-  { text: "To the man with only a hammer, every problem looks like a nail.", tag: "Thinking" },
+  { text: "To the man with only a hammer, every problem looks like a nail.", tag: "Thinking", src: "A Lesson on Elementary, Worldly Wisdom · USC, 1994" },
   { text: "The desire to get rich fast is pretty dangerous.", tag: "Temperament" },
   { text: "Envy is a really stupid sin, because it's the only one you could never possibly have any fun at.", tag: "Temperament" },
   { text: "You don't have to pee on an electric fence to learn not to do it.", tag: "Learning" },
   { text: "It's not supposed to be easy. Anyone who finds it easy is stupid.", tag: "Temperament" },
-  { text: "Opportunity comes to the prepared mind.", tag: "Preparation" },
-  { text: "The way to get what you want is to deserve what you want.", tag: "Character" },
+  { text: "Opportunity comes to the prepared mind.", tag: "Preparation", src: "After Louis Pasteur" },
+  { text: "The way to get what you want is to deserve what you want.", tag: "Character", src: "USC Gould School of Law commencement, 2007" },
   { text: "People calculate too much and think too little.", tag: "Thinking" },
   { text: "Live within your income and save so that you can invest.", tag: "Money" },
   { text: "There is no better teacher than history in determining the future.", tag: "Learning" },
-  { text: "The wise ones bet heavily when the world offers them that opportunity.", tag: "Conviction" },
+  { text: "The wise ones bet heavily when the world offers them that opportunity.", tag: "Conviction", src: "A Lesson on Elementary, Worldly Wisdom · USC, 1994" },
   { text: "Simplicity has a way of improving performance by enabling us to better understand what we are doing.", tag: "Simplicity" },
   { text: "Remember that reputation and integrity are your most valuable assets — and can be lost in a heartbeat.", tag: "Character" },
   { text: "A majority of life's errors are caused by forgetting what one is really trying to do.", tag: "Focus" },
-  { text: "I constantly see people rise in life who are not the smartest, sometimes not even the most diligent, but they are learning machines.", tag: "Learning" },
+  { text: "I constantly see people rise in life who are not the smartest, sometimes not even the most diligent, but they are learning machines.", tag: "Learning", src: "USC Gould School of Law commencement, 2007" },
   { text: "Understanding both the power of compound interest and the difficulty of getting it is the heart and soul of understanding a lot of things.", tag: "Compounding" },
-  { text: "The iron rule of nature is: you get what you reward for.", tag: "Incentives" },
+  { text: "The iron rule of nature is: you get what you reward for.", tag: "Incentives", src: "The Psychology of Human Misjudgment" },
   { text: "Someone will always be getting richer faster than you. This is not a tragedy.", tag: "Temperament" },
   { text: "It's waiting that helps you as an investor, and a lot of people just can't stand to wait.", tag: "Patience" },
   { text: "You have to keep learning, or you're going to be left behind.", tag: "Learning" },
-  { text: "Every mischance in life is an opportunity to behave well and learn something.", tag: "Adversity" },
+  { text: "Every mischance in life is an opportunity to behave well and learn something.", tag: "Adversity", src: "Harvard School commencement, 1986" },
   { text: "Assume life will be really tough, and then ask if you can handle it. If the answer is yes, you've won.", tag: "Adversity" },
   { text: "Choose clients as you would choose friends.", tag: "Character" },
-  { text: "Extreme specialization is the way to succeed.", tag: "Focus" },
-  { text: "The great lesson in microeconomics is to discriminate between when technology is going to help you and when it's going to kill you.", tag: "Business" },
+  { text: "Extreme specialization is the way to succeed.", tag: "Focus", src: "Daily Journal annual meeting, 2017" },
+  { text: "The great lesson in microeconomics is to discriminate between when technology is going to help you and when it's going to kill you.", tag: "Business", src: "A Lesson on Elementary, Worldly Wisdom · USC, 1994" },
   { text: "You need patience, discipline, and an agility to take losses and adversity without going crazy.", tag: "Temperament" },
   { text: "If you're not confused, you don't understand it very well.", tag: "Thinking" },
-  { text: "Wisdom acquisition is a moral duty.", tag: "Learning" },
+  { text: "Wisdom acquisition is a moral duty.", tag: "Learning", src: "USC Gould School of Law commencement, 2007" },
   { text: "It's so simple: you spend less than you earn, invest shrewdly, avoid toxic people and toxic activities, and try to keep learning all your life.", tag: "Money" },
-  { text: "In business we often find that the winning system goes almost ridiculously far in maximizing or minimizing one or a few variables.", tag: "Business" },
-  { text: "You should never, when facing some unbelievable tragedy, let one tragedy increase into two or three through a failure of will.", tag: "Adversity" }
+  { text: "In business we often find that the winning system goes almost ridiculously far in maximizing or minimizing one or a few variables.", tag: "Business", src: "A Lesson on Elementary, Worldly Wisdom · USC, 1994" },
+  { text: "You should never, when facing some unbelievable tragedy, let one tragedy increase into two or three through a failure of will.", tag: "Adversity", src: "Harvard School commencement, 1986" }
 ]
 
 var DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
@@ -122,7 +126,7 @@ function quoteAt(index) {
   var i = Math.floor(index) % total
   if (i < 0) i += total
   var entry = QUOTES[i]
-  return { text: entry.text, tag: entry.tag, index: i }
+  return { text: entry.text, tag: entry.tag, src: entry.src || "", index: i }
 }
 
 function quoteForDay(day) {
@@ -177,6 +181,22 @@ function attributionLine(quote) {
   return tag === "" ? "— " + ATTRIBUTION : "— " + ATTRIBUTION + " · " + tag
 }
 
+// The wall label's second line: where it was said, when that is known.
+function sourceLine(quote) {
+  return quote && quote.src ? String(quote.src) : ""
+}
+
+function escapeHtml(text) {
+  return String(text || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+}
+
+// The bar carries the opening mark; the panel closes the quotation, with the
+// closing mark set back in the dim colour so it reads as punctuation rather
+// than as part of the line.
+function quoteHtml(text, closerColor) {
+  return escapeHtml(text) + '<font color="' + String(closerColor || "") + '">”</font>'
+}
+
 // Long quotes need to give up some size to stay inside the card. Three steps
 // is enough; anything finer just looks unsteady as you page through.
 function quoteFontScale(text) {
@@ -221,6 +241,7 @@ if (typeof module !== "undefined") {
     APP_NAME: APP_NAME,
     ATTRIBUTION: ATTRIBUTION,
     QUOTE_MARK: QUOTE_MARK,
+    CHECK_MARK: CHECK_MARK,
     QUOTES: QUOTES,
     dayNumber: dayNumber,
     seededRandom: seededRandom,
@@ -235,6 +256,9 @@ if (typeof module !== "undefined") {
     dateLine: dateLine,
     positionLine: positionLine,
     attributionLine: attributionLine,
+    sourceLine: sourceLine,
+    escapeHtml: escapeHtml,
+    quoteHtml: quoteHtml,
     quoteFontScale: quoteFontScale,
     shellQuote: shellQuote,
     copyCommand: copyCommand,

@@ -191,3 +191,19 @@ test("settings readers fall back sanely", () => {
   assert.equal(Model.numberSetting("120", 34, 12, 80), 80)
   assert.equal(Model.numberSetting(-5, 34, 12, 80), 12)
 })
+
+test("sources are attached only where the deck records one", () => {
+  const withSource = Model.QUOTES.filter(q => q.src)
+  assert.ok(withSource.length >= 10)
+  for (const q of Model.QUOTES) if (q.src) assert.ok(q.src.length > 8, q.text)
+  const hammer = Model.QUOTES.findIndex(q => q.text.startsWith("To the man with only a hammer"))
+  assert.match(Model.sourceLine(Model.quoteAt(hammer)), /USC, 1994$/)
+  assert.equal(Model.sourceLine(Model.quoteAt(Model.QUOTES.findIndex(q => !q.src))), "")
+  assert.equal(Model.sourceLine(null), "")
+})
+
+test("the panel closes the quotation in the dim colour", () => {
+  assert.equal(Model.quoteHtml("Show me the incentive.", "#777"), 'Show me the incentive.<font color="#777">”</font>')
+  assert.equal(Model.escapeHtml("a < b & c"), "a &lt; b &amp; c")
+  assert.ok(Model.quoteHtml("x < y", "#000").startsWith("x &lt; y"))
+})

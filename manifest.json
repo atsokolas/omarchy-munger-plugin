@@ -7,9 +7,11 @@
   "license": "MIT",
   "description": "A Charlie Munger quote a day on the Omarchy bar.",
   "kinds": [
+    "service",
     "bar-widget"
   ],
   "entryPoints": {
+    "service": "Service.qml",
     "barWidget": "Panel.qml"
   },
   "barWidget": {

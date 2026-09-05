@@ -19,10 +19,13 @@ Panel {
 
   // --- state ---------------------------------------------------------------
 
-  // Rolled over by a timer rather than read fresh each paint, so the quote
-  // changes on its own at local midnight without the panel being reopened.
-  property date today: new Date()
-  readonly property int todayDay: Model.dayNumber(today)
+  // The day lives in the shared service, so every bar turns over together
+  // and the quote changes on its own at local midnight.
+  readonly property var sharedService: bar && bar.shell && typeof bar.shell.serviceFor === "function"
+    ? bar.shell.serviceFor(moduleName) : null
+  readonly property var service: sharedService || localService
+  readonly property date today: service.today
+  readonly property int todayDay: service.todayDay
 
   // Browsing walks the deck in the order the days will serve it. `viewDay` is
   // only meaningful while `browsing`; leaving browse mode snaps back to today.
@@ -31,7 +34,7 @@ Panel {
   readonly property int activeDay: browsing ? viewDay : todayDay
 
   readonly property var quote: Model.quoteForDay(activeDay)
-  readonly property var todayQuote: Model.quoteForDay(todayDay)
+  readonly property var todayQuote: service.todayQuote
 
   readonly property bool showTeaser: Model.boolSetting(setting("showTeaser", false), false)
   readonly property int teaserLength: Model.numberSetting(setting("teaserLength", 34), 34, 12, 80)
@@ -86,7 +89,6 @@ Panel {
       backToToday()
       return
     }
-    today = new Date()
     revealAnimation.restart()
     Qt.callLater(function () { keyCatcher.forceActiveFocus() })
   }
@@ -105,25 +107,26 @@ Panel {
   }
 
   onQuoteChanged: if (opened) revealAnimation.restart()
-  onTodayDayChanged: markPulse.restart()
+  // The daily widgets turn over on the same second; the mark waits a beat so
+  // the bar reads left to right — building, picture, then the quote.
+  onTodayDayChanged: beat.restart()
 
+  Timer {
+    id: beat
+    interval: 350
+    onTriggered: markPulse.restart()
+  }
+
+  // While it runs, both marks become a check.
   Timer {
     id: copiedTimer
     interval: 1600
     repeat: false
   }
 
-  // One tick a minute is plenty to catch midnight, and costs nothing next to
-  // waking on a timer scheduled for the exact second.
-  Timer {
-    interval: 60000
-    repeat: true
-    running: true
-    triggeredOnStart: true
-    onTriggered: {
-      var now = new Date()
-      if (Model.dayNumber(now) !== root.todayDay) root.today = now
-    }
+  Service {
+    id: localService
+    active: root.sharedService === null
   }
 
   IpcHandler {
@@ -192,6 +195,7 @@ Panel {
 
       QuoteMark {
         id: mark
+        glyph: copiedTimer.running ? Model.CHECK_MARK : Model.QUOTE_MARK
         markSize: Style.bar.iconFont
         color: button.foreground
         fontFamily: button.fontFamily
@@ -266,8 +270,9 @@ Panel {
             id: heroMark
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
+            glyph: copiedTimer.running ? Model.CHECK_MARK : Model.QUOTE_MARK
             markSize: Style.font.display
-            color: root.foreground
+            color: copiedTimer.running ? Color.accent : root.foreground
             fontFamily: root.fontFamily
           }
 
@@ -354,7 +359,8 @@ Panel {
 
             Text {
               width: parent.width
-              text: root.quote.text
+              text: Model.quoteHtml(root.quote.text, root.dim)
+              textFormat: Text.StyledText
               color: root.foreground
               font.family: root.fontFamily
               font.pixelSize: Math.max(Style.font.body,
@@ -364,13 +370,28 @@ Panel {
               lineHeightMode: Text.ProportionalHeight
             }
 
-            Text {
+            Column {
               width: parent.width
-              text: Model.attributionLine(root.quote)
-              color: root.dim
-              font.family: root.fontFamily
-              font.pixelSize: Style.font.bodySmall
-              elide: Text.ElideRight
+              spacing: Style.space(2)
+
+              Text {
+                width: parent.width
+                text: Model.attributionLine(root.quote)
+                color: root.dim
+                font.family: root.fontFamily
+                font.pixelSize: Style.font.bodySmall
+                elide: Text.ElideRight
+              }
+
+              Text {
+                width: parent.width
+                visible: text !== ""
+                text: Model.sourceLine(root.quote)
+                color: Qt.darker(root.foreground, 2.1)
+                font.family: root.fontFamily
+                font.pixelSize: Style.font.caption
+                elide: Text.ElideRight
+              }
             }
           }
         }
