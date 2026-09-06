@@ -2,9 +2,10 @@
 
 One Charlie Munger quote a day, on the Omarchy bar.
 
-Charlie sits in the bar — drawn, not photographed: the broad face, the hair
-that is left, and the big round spectacles. Hover him for the day's quote, click
-him for the quote in full, and browse the rest of the deck from there. Nothing is
+Charlie sits in the bar — drawn, not photographed: the high bald dome, the
+jowls, the hair that is left at the temples, and the big rounded-square
+spectacles that are the whole likeness. Hover him for the day's quote, click him
+for the quote in full, and browse the rest of the deck from there. Nothing is
 fetched: the deck ships with the plugin, so it works offline and costs nothing
 to run.
 
@@ -84,8 +85,9 @@ the clipboard command — and is covered by Node tests:
 ```
 
 QML holds only presentation. `CharlieIcon.qml` draws him on a Canvas from one
-path in a unit square, so the same drawing serves the bar at 14px and the panel
-at 40; below 18px the eyebrows and nose are left out so what remains still reads.
+set of paths in a unit square, two ways: below 24px a filled bust with the
+lenses knocked out and glazed — an outline at bar size is a smudge — and above
+it a line portrait with brows, nose, and mouth.
 
 ### Glyphs
 
