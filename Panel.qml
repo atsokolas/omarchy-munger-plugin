@@ -8,9 +8,9 @@ import "Model.js" as Model
 
 // Munger — one Charlie Munger quote a day on the Omarchy bar.
 //
-// There is nothing to fetch, so there is no service: the deck ships with the
-// plugin and the day picks from it. The bar shows today's quote; the panel
-// shows it in full and lets you wander the rest of the deck.
+// There is nothing to fetch: the deck ships with the plugin and the day picks
+// from it. Charlie himself sits on the bar; the panel shows the quote in full
+// and lets you wander the rest of the deck.
 Panel {
   id: root
   moduleName: "atsokolas.munger"
@@ -106,7 +106,7 @@ Panel {
     easing.type: Easing.OutCubic
   }
 
-  onQuoteChanged: if (opened) revealAnimation.restart()
+  onQuoteChanged: if (opened) { revealAnimation.restart(); heroMark.raiseBrows() }
   // The daily widgets turn over on the same second; the mark waits a beat so
   // the bar reads left to right — building, picture, then the quote.
   onTodayDayChanged: beat.restart()
@@ -117,7 +117,7 @@ Panel {
     onTriggered: markPulse.restart()
   }
 
-  // While it runs, both marks become a check.
+  // While it runs, Charlie winks.
   Timer {
     id: copiedTimer
     interval: 1600
@@ -193,14 +193,12 @@ Panel {
         ? mark.implicitWidth + gap + teaserText.implicitWidth
         : mark.implicitWidth
 
-      QuoteMark {
+      CharlieIcon {
         id: mark
-        glyph: copiedTimer.running ? Model.CHECK_MARK : Model.QUOTE_MARK
-        markSize: Style.bar.iconFont
-        color: button.foreground
-        fontFamily: button.fontFamily
-        width: implicitWidth
-        height: parent.height
+        iconSize: Math.min(parent.height - Style.spaceReal(3), Style.bar.iconFont * 1.3)
+        iconColor: button.foreground
+        wink: copiedTimer.running
+        y: (parent.height - height) / 2
         x: pill.teaserVisible ? button.scaledHorizontalMargin : (parent.width - implicitWidth) / 2
 
         // A small nod each time the quote turns over.
@@ -266,14 +264,14 @@ Panel {
           Layout.fillWidth: true
           implicitHeight: Math.max(heroMark.implicitHeight, heroLabels.implicitHeight, headerButtons.implicitHeight)
 
-          QuoteMark {
+          CharlieIcon {
             id: heroMark
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            glyph: copiedTimer.running ? Model.CHECK_MARK : Model.QUOTE_MARK
-            markSize: Style.font.display
-            color: copiedTimer.running ? Color.accent : root.foreground
-            fontFamily: root.fontFamily
+            iconSize: Style.font.display * 1.35
+            iconColor: copiedTimer.running ? Color.accent : root.foreground
+            wink: copiedTimer.running
+            lively: root.opened
           }
 
           Column {

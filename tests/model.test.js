@@ -202,8 +202,9 @@ test("sources are attached only where the deck records one", () => {
   assert.equal(Model.sourceLine(null), "")
 })
 
-test("the panel closes the quotation in the dim colour", () => {
-  assert.equal(Model.quoteHtml("Show me the incentive.", "#777"), 'Show me the incentive.<font color="#777">”</font>')
+test("the panel sets the quotation between marks in the dim colour", () => {
+  assert.equal(Model.quoteHtml("Show me the incentive.", "#777"),
+    '<font color="#777">“</font>Show me the incentive.<font color="#777">”</font>')
   assert.equal(Model.escapeHtml("a < b & c"), "a &lt; b &amp; c")
-  assert.ok(Model.quoteHtml("x < y", "#000").startsWith("x &lt; y"))
+  assert.ok(Model.quoteHtml("x < y", "#000").includes("x &lt; y"))
 })

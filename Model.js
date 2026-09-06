@@ -7,8 +7,6 @@ var ATTRIBUTION = "Charlie Munger"
 // (U+275D) and the Nerd Font MDI quote glyphs do not. See the font notes in
 // README.md before swapping this.
 var QUOTE_MARK = "“"
-// nf-md-check. Verified to render on this machine's font; see README.md.
-var CHECK_MARK = "󰄬"
 
 // The deck. `src` names where a quote was said when that is a matter of
 // record; the rest go without rather than guess. Order here is irrelevant —
@@ -190,11 +188,11 @@ function escapeHtml(text) {
   return String(text || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
 }
 
-// The bar carries the opening mark; the panel closes the quotation, with the
-// closing mark set back in the dim colour so it reads as punctuation rather
-// than as part of the line.
-function quoteHtml(text, closerColor) {
-  return escapeHtml(text) + '<font color="' + String(closerColor || "") + '">”</font>'
+// The panel sets the quotation between its marks, with the marks in the dim
+// colour so they read as punctuation rather than as part of the line.
+function quoteHtml(text, markColor) {
+  var mark = function(glyph) { return '<font color="' + String(markColor || "") + '">' + glyph + '</font>' }
+  return mark(QUOTE_MARK) + escapeHtml(text) + mark("”")
 }
 
 // Long quotes need to give up some size to stay inside the card. Three steps
@@ -241,7 +239,6 @@ if (typeof module !== "undefined") {
     APP_NAME: APP_NAME,
     ATTRIBUTION: ATTRIBUTION,
     QUOTE_MARK: QUOTE_MARK,
-    CHECK_MARK: CHECK_MARK,
     QUOTES: QUOTES,
     dayNumber: dayNumber,
     seededRandom: seededRandom,

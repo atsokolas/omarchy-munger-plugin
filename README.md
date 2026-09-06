@@ -2,12 +2,14 @@
 
 One Charlie Munger quote a day, on the Omarchy bar.
 
-A quotation mark sits in the bar. Hover it for the day's quote, click it for the
-quote in full, and browse the rest of the deck from there. Nothing is fetched:
-the deck ships with the plugin, so it works offline and costs nothing to run.
+Charlie sits in the bar — drawn, not photographed: the broad face, the hair
+that is left, and the big round spectacles. Hover him for the day's quote, click
+him for the quote in full, and browse the rest of the deck from there. Nothing is
+fetched: the deck ships with the plugin, so it works offline and costs nothing
+to run.
 
-The bar carries the opening mark; the panel closes the quotation. Copy a quote
-and both marks become a check for a moment.
+He blinks now and then. Copy a quote and he winks; shuffle and he raises his
+eyebrows.
 
 ## Install
 
@@ -81,9 +83,9 @@ the clipboard command — and is covered by Node tests:
 ./tests/run
 ```
 
-QML holds only presentation. `QuoteMark.qml` exists because a quotation mark
-hangs at the top of the em square: it measures the tight bounding rect and
-centres the painted ink instead of the line box.
+QML holds only presentation. `CharlieIcon.qml` draws him on a Canvas from one
+path in a unit square, so the same drawing serves the bar at 14px and the panel
+at 40; below 18px the eyebrows and nose are left out so what remains still reads.
 
 ### Glyphs
 
@@ -93,14 +95,13 @@ checked before use:
 
 | Glyph | Codepoint | Used for |
 |---|---|---|
-| `“` | U+201C | the mark, in the bar and the panel |
+| `“` `”` | U+201C, U+201D | the marks around the quote in the panel |
 | `󰆏` | U+F018F | copy |
 | `󰒝` | U+F049D | shuffle |
 | `󰃭` | U+F00ED | back to today |
-| `󰄬` | U+F012C | the check, while a copy is fresh |
 
-`❝` (U+275D) is **not** in the font and renders blank — do not swap the mark
-for an ornamental one without checking:
+`❝` (U+275D) is **not** in the font and renders blank — do not swap the marks
+for ornamental ones without checking:
 
 ```bash
 magick -size 700x160 xc:'#1a1b26' -font /usr/share/fonts/TTF/JetBrainsMonoNerdFont-Regular.ttf \
