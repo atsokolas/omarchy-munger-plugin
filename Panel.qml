@@ -39,8 +39,13 @@ Panel {
   readonly property bool showTeaser: Model.boolSetting(setting("showTeaser", false), false)
   readonly property int teaserLength: Model.numberSetting(setting("teaserLength", 34), 34, 12, 80)
 
-  readonly property color foreground: bar ? bar.foreground : Color.foreground
+  // Every colour comes from the theme palette: the shell's Color singleton
+  // isn't visible to third-party plugins.
+  readonly property var palette: service ? service.palette : null
+  readonly property color foreground: bar ? bar.foreground : (palette ? palette.foreground : "#cccccc")
   readonly property color dim: Qt.darker(foreground, 1.55)
+  readonly property color accent: palette ? palette.accent : foreground
+  readonly property color surface: palette ? palette.background : "transparent"
   readonly property string fontFamily: bar ? bar.fontFamily : Style.font.family
   readonly property bool vertical: bar ? bar.vertical : false
 
@@ -173,8 +178,8 @@ Panel {
       ? -1
       : Math.max(Style.bar.iconSlot, pill.contentWidth + button.scaledHorizontalMargin * 2)
     foreground: root.opened
-      ? Color.accent
-      : (root.bar ? root.bar.barForeground : Color.foreground)
+      ? root.accent
+      : (root.bar ? root.bar.barForeground : root.foreground)
     tooltipText: Model.tooltipText(root.todayQuote)
 
     onPressed: function (buttonCode) {
@@ -197,6 +202,7 @@ Panel {
         id: mark
         iconSize: Math.min(parent.height - Style.spaceReal(3), Style.bar.iconFont * 1.3)
         iconColor: button.foreground
+        background: root.bar ? root.bar.background : "transparent"
         wink: copiedTimer.running
         y: (parent.height - height) / 2
         x: pill.teaserVisible ? button.scaledHorizontalMargin : (parent.width - implicitWidth) / 2
@@ -269,7 +275,8 @@ Panel {
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             iconSize: Style.font.display * 1.35
-            iconColor: copiedTimer.running ? Color.accent : root.foreground
+            iconColor: copiedTimer.running ? root.accent : root.foreground
+            background: root.surface
             wink: copiedTimer.running
             lively: root.opened
           }
@@ -298,7 +305,7 @@ Panel {
               text: copiedTimer.running
                 ? "Copied to clipboard"
                 : Model.positionLine(root.browsing, root.quote.index, Model.QUOTES.length, root.today)
-              color: copiedTimer.running ? Color.accent : root.dim
+              color: copiedTimer.running ? root.accent : root.dim
               font.family: root.fontFamily
               font.pixelSize: Style.font.bodySmall
               elide: Text.ElideRight

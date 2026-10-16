@@ -234,8 +234,33 @@ function numberSetting(value, fallback, min, max) {
   return Math.max(min, Math.min(max, Math.round(n)))
 }
 
+// The theme's palette from colors.toml. The shell's Color singleton isn't
+// visible to third-party plugins, so the plugin reads the file itself.
+function parseColors(toml) {
+  var out = {}
+  var lines = String(toml || "").split("\n")
+  for (var i = 0; i < lines.length; i++) {
+    var m = lines[i].match(/^\s*([a-z_]+)\s*=\s*"([^"]*)"/)
+    if (m) out[m[1]] = m[2]
+  }
+  var hex = /^#[0-9a-fA-F]{6}$/
+  if (!hex.test(out.foreground || "") || !hex.test(out.background || "")) return null
+  var pick = function(key, fallback) { return hex.test(out[key] || "") ? out[key].toLowerCase() : fallback }
+  var fg = out.foreground.toLowerCase()
+  var accent = pick("accent", fg)
+  return {
+    mode: out.mode === "light" ? "light" : "dark",
+    foreground: fg,
+    background: out.background.toLowerCase(),
+    accent: accent,
+    muted: pick("muted", pick("dark_foreground", fg)),
+    red: pick("red", accent)
+  }
+}
+
 if (typeof module !== "undefined") {
   module.exports = {
+    parseColors: parseColors,
     APP_NAME: APP_NAME,
     ATTRIBUTION: ATTRIBUTION,
     QUOTE_MARK: QUOTE_MARK,

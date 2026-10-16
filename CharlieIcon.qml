@@ -11,9 +11,9 @@ Item {
   id: root
 
   property real iconSize: Style.font.icon
-  property color iconColor: Color.foreground
+  property color iconColor: "#cccccc"
   // The bar's ground, for the lenses knocked out of the bust.
-  property color background: Color.bar.background
+  property color background: "transparent"
   // Idle blinking. Off in the panel header while it is closed, to save paint.
   property bool lively: true
   property bool wink: false

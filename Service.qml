@@ -1,4 +1,6 @@
 import QtQuick
+import Quickshell
+import Quickshell.Io
 import "Model.js" as Model
 
 // One clock per shell. Every bar — one per monitor — reads this instance, so
@@ -26,5 +28,18 @@ Item {
       var now = new Date()
       if (Model.dayNumber(now) !== root.todayDay) root.today = now
     }
+  }
+
+  // The theme's palette, read from colors.toml and kept current.
+  readonly property string colorsPath: Quickshell.env("HOME") + "/.local/state/omarchy/current/theme/colors.toml"
+  property var palette: null
+
+  FileView {
+    path: root.colorsPath
+    watchChanges: true
+    printErrors: false
+    onLoaded: root.palette = Model.parseColors(text())
+    onLoadFailed: root.palette = null
+    onFileChanged: reload()
   }
 }
